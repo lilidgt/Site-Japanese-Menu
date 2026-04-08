@@ -36,3 +36,74 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
+
+.dish-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+}
+
+.dish-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.dish-card h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.price {
+  font-weight: bold;
+  color: #d32f2f;
+}
+
+.actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+/* Form Styles */
+.form-section {
+  margin-bottom: 30px;
+}
+
+.dish-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+}
+
+.dish-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.btn-submit {
+  padding: 10px;
+  background-color: #d32f2f; /* Vermelho combinando com o header */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background-color: #b71c1c;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background-color: #eee;
+  margin: 30px 0;
+}
