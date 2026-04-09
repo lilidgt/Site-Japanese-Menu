@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function DishForm({ dishes, setDishes }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
+  const [category, setCategory] = useState(''); 
   
   const navigate = useNavigate();
-  const { id } = useParams(); // gets id if exists
+  const { id } = useParams();
 
-  // if id = editing
   useEffect(() => {
     if (id) {
       const dishToEdit = dishes.find((d) => d.id === parseInt(id));
@@ -17,36 +18,53 @@ function DishForm({ dishes, setDishes }) {
         setName(dishToEdit.name);
         setDescription(dishToEdit.description);
         setPrice(dishToEdit.price);
+        setCategory(dishToEdit.category || ''); 
       }
     }
   }, [id, dishes]);
 
-  const handleSaveDish = (e) => {
+  const handleSaveDish = async (e) => {
     e.preventDefault();
-    if (!name || !description || !price) return;
-
-    if (id) {
-      // update
-      const updatedDishes = dishes.map((dish) => {
-        if (dish.id === parseInt(id)) {
-          return { ...dish, name, description, price: parseFloat(price) };
-        }
-        return dish;
-      });
-      setDishes(updatedDishes);
-    } else {
-      // create
-      const newDish = {
-        id: Date.now(),
-        name,
-        description,
-        price: parseFloat(price)
-      };
-      setDishes([...dishes, newDish]);
+    
+    if (!name || !description || !price || !category) {
+        alert('Please fill all fields!');
+        return;
     }
 
-    // home after save
-    navigate('/');
+    const dishData = {
+        name,
+        description,
+        price: parseFloat(price),
+        category,
+        is_available: true
+    };
+
+    try {
+        if (id) {
+          // update
+          await axios.put(`http://localhost:3000/dishes/${id}`, dishData);
+          
+          const updatedDishes = dishes.map((dish) => {
+            if (dish.id === parseInt(id)) {
+              return { ...dish, ...dishData };
+            }
+            return dish;
+          });
+          setDishes(updatedDishes);
+          
+        } else {
+          // create
+          const response = await axios.post('http://localhost:3000/dishes', dishData);
+          
+          const newDish = { id: response.data.id, ...dishData };
+          setDishes([...dishes, newDish]);
+        }
+        
+        navigate('/');
+    } catch (error) {
+        console.error('Error saving dish:', error);
+        alert('Error saving to database!');
+    }
   };
 
   return (
@@ -55,8 +73,9 @@ function DishForm({ dishes, setDishes }) {
       
       <form onSubmit={handleSaveDish} className="dish-form">
         <input type="text" placeholder="Dish Name" value={name} onChange={(e) => setName(e.target.value)} />
+        <input type="text" placeholder="Category (e.g. Main Course, Appetizer)" value={category} onChange={(e) => setCategory(e.target.value)} />
         <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
-        <input type="number" placeholder="Price (ex: 25.50)" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} />
+        <input type="number" placeholder="Price (25.50)" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} />
         
         <div className="form-actions">
           <button type="submit" className="btn-submit">

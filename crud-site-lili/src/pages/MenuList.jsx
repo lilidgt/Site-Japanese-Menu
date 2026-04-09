@@ -1,11 +1,27 @@
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function MenuList({ dishes, setDishes }) {
   const navigate = useNavigate();
 
-  const handleDeleteDish = (id) => {
-    const updatedDishes = dishes.filter((dish) => dish.id !== id);
-    setDishes(updatedDishes);
+  // delete from db
+  const handleDeleteDish = async (id) => {
+    const isConfirmed = window.confirm('Do you really want to delete this dish?');
+    
+    if (isConfirmed) {
+      try {
+        // del from back
+        await axios.delete(`http://localhost:3000/dishes/${id}`);
+        
+        // del from screen
+        const updatedDishes = dishes.filter((dish) => dish.id !== id);
+        setDishes(updatedDishes);
+        
+      } catch (error) {
+        console.error('Error deleting dish:', error);
+        alert('Error deleting dish');
+      }
+    }
   };
 
   return (
@@ -18,7 +34,7 @@ function MenuList({ dishes, setDishes }) {
           dishes.map((dish) => (
             <div key={dish.id} className="dish-card">
               <h3>{dish.name}</h3>
-              <p className="price">${dish.price.toFixed(2)}</p>
+              <p className="price">${Number(dish.price).toFixed(2)}</p>
               
               <div className="actions">
                 <button className="btn-details" onClick={() => navigate(`/dish/${dish.id}`)}>View Details</button>
