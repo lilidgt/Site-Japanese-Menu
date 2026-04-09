@@ -13,7 +13,7 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'senha', // MARK: ALTERA SENHA AQUI!
+    password: 'senha', // MARK: altera a senha aq professor
     database: 'japanese_foods' 
 });
 
@@ -26,9 +26,7 @@ db.connect((err) => {
     }
 });
 
-// rotas do crud
-
-// 1. READ: GET p listar itens
+// read (get)
 app.get('/dishes', (req, res) => {
     const sql = 'SELECT * FROM dishes';
     db.query(sql, (err, results) => {
@@ -40,7 +38,7 @@ app.get('/dishes', (req, res) => {
     });
 });
 
-// 2. CREATE: POST p add nv item
+// create (post)
 app.post('/dishes', (req, res) => {
     const { name, category, price, description, is_available } = req.body;
     
@@ -50,7 +48,6 @@ app.post('/dishes', (req, res) => {
     }
 
     const sql = 'INSERT INTO dishes (name, category, price, description, is_available) VALUES (?, ?, ?, ?, ?)';
-    // se is_available n for enviado, padrão = true
     const statusAvailable = is_available !== undefined ? is_available : true;
 
     db.query(sql, [name, category, price, description, statusAvailable], (err, result) => {
@@ -62,7 +59,7 @@ app.post('/dishes', (req, res) => {
     });
 });
 
-// 3. UPDATE: PUT p att item existente
+// update (put)
 app.put('/dishes/:id', (req, res) => {
     const { id } = req.params;
     const { name, category, price, description, is_available } = req.body;
@@ -77,7 +74,7 @@ app.put('/dishes/:id', (req, res) => {
     });
 });
 
-// 4. DELETE: DELETE p remover item
+// delete
 app.delete('/dishes/:id', (req, res) => {
     const { id } = req.params;
     const sql = 'DELETE FROM dishes WHERE id=?';
@@ -90,7 +87,6 @@ app.delete('/dishes/:id', (req, res) => {
     });
 });
 
-// ligar servidor
 app.listen(3000, () => {
     console.log('Server running door: 3000');
 });
