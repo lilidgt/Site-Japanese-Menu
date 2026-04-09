@@ -1,4 +1,4 @@
-import { useState } from 'react'; // NOVO: Precisamos do useState aqui agora
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
