@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 import './index.css';
 
 import MenuList from './pages/MenuList';
@@ -7,10 +8,24 @@ import DishForm from './pages/DishForm';
 import DishDetails from './pages/DishDetails';
 
 function App() {
-  const [dishes, setDishes] = useState([
-    { id: 1, name: 'Shoyu Ramen', description: 'Soy sauce based broth, chashu pork, marinated egg, and green onions.', price: 45.90 },
-    { id: 2, name: 'Spicy Miso Ramen', description: 'Spicy miso broth, ground pork, bean sprouts, and corn.', price: 48.50 }
-  ]);
+const [dishes, setDishes] = useState([]);
+
+// fetch data from node server
+  const fetchDishes = async () => {
+    try {
+      // reaches back
+      const response = await axios.get('http://localhost:3000/dishes');
+      // save sql into state
+      setDishes(response.data);
+    } catch (error) {
+      console.error('Error fetching data from backend:', error);
+      alert('Could not connect to the database.');
+    }
+  };
+
+  useEffect(() => {
+    fetchDishes();
+  }, []);
 
   return (
     <BrowserRouter>

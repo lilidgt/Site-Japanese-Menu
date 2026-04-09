@@ -13,7 +13,7 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Bonotee06!',
+    password: 'senha', // MARK: ALTERA SENHA AQUI!
     database: 'japanese_foods' 
 });
 
