@@ -27,7 +27,7 @@ function DishForm({ dishes, setDishes }) {
     e.preventDefault();
     
     if (!name || !description || !price || !category) {
-        alert('Please fill all fields!');
+        alert('Please fill all fields! :P');
         return;
     }
 
