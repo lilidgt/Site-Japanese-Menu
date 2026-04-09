@@ -13,7 +13,6 @@ const [dishes, setDishes] = useState([]);
 // fetch data from node server
   const fetchDishes = async () => {
     try {
-      // reaches back
       const response = await axios.get('http://localhost:3000/dishes');
       // save sql into state
       setDishes(response.data);
